@@ -1,0 +1,406 @@
+<!--nav bar-->
+<div class="container" style="width: 100%">
+  <div class="row" >
+    <div  style="width: 100%" >
+      <nav  style="background-color: #0d47a1;width: 100%">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-2" aria-expanded="true">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" style="color: #FFFFFF"><b>Mahal App</b></a>
+          </div>
+
+          <div style="margin-left: 90%" class="navbar-collapse collapse in" id="bs-example-navbar-collapse-2" aria-expanded="true">
+            <ul class="nav navbar-nav">
+
+              <li ><a style="color: #ffffff" (click)="Logout()">Logout</a></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+<!--/////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+<!--notification bar-->
+<div class="container" style="width: 100%">
+  <div class="row" style="width: 100%">
+
+    <div class="col-xs-12" id="alerttag" style="width: 100%;display:none">
+      <div class="bs-component">
+        <div class="alert alert-dismissible alert-success" id="alerttag">
+          <button type="button" class="close" data-dismiss="alert" (click)="dismiss()">×</button>
+          <strong>Well done!</strong> You have successfully Logged in
+        </div>
+      </div>
+    </div>
+
+
+    <!--///////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+    <!--container body-->
+    <div class="container" style="width:100%">
+      <div class="row">
+
+
+        <!--container nav pills -->
+        <div class="col-xs-2" style="margin-top: 3%">
+          <ul class="nav nav-pills nav-stacked">
+            <li class="active"><a (click)="home()">Menu</a></li>
+            <li><a (click)="home()">Home</a></li>
+            <li><a (click)="addmember()">Add Mahal</a></li>
+            <li><a (click)="changepwd()">Change password</a></li>
+          </ul>
+        </div>
+
+        <!--container content-->
+        <div class="col-xs-10" style="margin-top: 3%">
+          <ul class="breadcrumb">
+            <li class="active">{{homedata}}</li>
+          </ul>
+
+          <div id="maintable">
+            <div class="page-header">
+              <h1 id="tables">Mahal List <a (click)="addmember()" class="btn btn-primary"
+                                            style="float: right;">+</a></h1>
+            </div>
+
+            <!--main table-->
+            <div class="bs-component">
+              <table class="table table-striped table-hover table-condensed table-bordered " id="example">
+                <thead>
+                <tr class="info">
+                  <th>Mahal Code</th>
+                  <th>Mahal Name</th>
+                  <th>Phone</th>
+                  <th>Alternate Phone</th>
+                  <th>Address</th>
+                  <th>Pincode</th>
+                  <th>Email</th>
+                  <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="active" *ngFor="let data of arraylist;let i = index">
+                  <td>{{data.mahalcode}}</td>
+                  <td>{{data.mahalname}}</td>
+                  <td>{{data.phone}}</td>
+                  <td>{{data.alternatenumber}}</td>
+                  <td>{{data.address}}</td>
+                  <td>{{data.pincode}}</td>
+                  <td>{{data.email}}</td>
+                  <td><a id='edit' (click)="edit(data._id)" class="btn btn-success"
+                         style="float: left;">Edit</a> <a (click)="remove(data._id)"
+                                                          class="btn btn-danger"
+                                                          style="float: left;margin-left: 10px">X</a>
+                  </td>
+                </tr>
+
+                </tbody>
+              </table>
+
+            </div>
+          </div>
+
+
+          <!--change password-->
+
+
+          <div id="changepassword" style="display: none">
+            <div class="well bs-component">
+              <form class="form-horizontal">
+                <fieldset>
+                  <legend>Change Password</legend>
+
+
+                  <div class="form-group">
+                    <label for="inputPassword" class="col-lg-2 control-label">Current
+                      Password</label>
+                    <div class="col-lg-10">
+                      <input type="password" class="form-control" name='password'
+                             id="inputPassword3" placeholder="Password"
+                             [(ngModel)]="currentpassword" required autofocus>
+
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="inputPassword" class="col-lg-2 control-label">New Password</label>
+                    <div class="col-lg-10">
+                      <input type="password" class="form-control" name='password'
+                             id="inputPassword" placeholder="Password" [(ngModel)]="newpassword"
+                             required>
+
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="inputPassword" class="col-lg-2 control-label">Confirm
+                      Password</label>
+                    <div class="col-lg-10">
+                      <input type="password" class="form-control" name='cpassword'
+                             id="inputPassword2" placeholder="Password" [(ngModel)]="cnewpassword"
+                             required>
+                      <p id="validate-status"></p>
+                    </div>
+
+                  </div>
+
+
+                  <div class="form-group">
+                    <div class="col-lg-10 col-lg-offset-2">
+                      <button type="reset" class="btn btn-default" (click)="home();">Cancel
+                      </button>
+                      <button type="submit" class="btn btn-primary" (click)="passwordForm()">
+                        Submit
+                      </button>
+                    </div>
+                  </div>
+                </fieldset>
+                <div id='notifyss' class="alert alert-dismissible alert-danger" style="display: none">
+                  <strong>Something went wrong..username may be already registered please try
+                    again</strong>
+                </div>
+              </form>
+
+
+            </div>
+          </div>
+
+          <!--add customer form-->
+          <div id="addcustomer" style="display: none">
+            <div class="well bs-component">
+              <form class="form-horizontal">
+                <fieldset>
+                  <legend>Add Mahal Detail</legend>
+                  <div class="form-group">
+                    <label for="inputEmail" class="col-lg-2 control-label">Mahal Code</label>
+                    <div class="col-lg-10">
+                      <input type="text" name='code' class="form-control" id="code"
+                             placeholder="Code" [(ngModel)]="mahalcode" required autofocus>
+                    </div>
+
+                  </div>
+                  <div class="form-group">
+                    <label for="inputEmail" class="col-lg-2 control-label">Mahal Name</label>
+                    <div class="col-lg-10">
+                      <input type="text" class="form-control" name='name' id="name"
+                             placeholder="Name" [(ngModel)]="mahalname" required>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="inputEmail" class="col-lg-2 control-label">Pin Code</label>
+                    <div class="col-lg-10">
+                      <input type="text" class="form-control" name='pincode' id="pincode"
+                             placeholder="pincode" [(ngModel)]="pincode" required>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="inputEmail" class="col-lg-2 control-label">Email</label>
+                    <div class="col-lg-10">
+                      <input type="email" class="form-control" name='email' id="email"
+                             placeholder="email" [(ngModel)]="email" required>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="inputEmail" class="col-lg-2 control-label">Phone</label>
+                    <div class="col-lg-10">
+                      <input type="number" class="form-control" name='phone' id="phone"
+                             placeholder="phone" [(ngModel)]="phone" required>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="inputEmail" class="col-lg-2 control-label">Alternate number</label>
+                    <div class="col-lg-10">
+                      <input type="number" class="form-control" name='api' id="api"
+                             placeholder="alternate number" [(ngModel)]="alternatenumber"
+                             required>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="inputPassword" class="col-lg-2 control-label">Password</label>
+                    <div class="col-lg-10">
+                      <input type="password" class="form-control" name='password'
+                             id="inputPassword" placeholder="Password" [(ngModel)]="password"
+                             required>
+
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="inputPassword" class="col-lg-2 control-label">Confirm
+                      Password</label>
+                    <div class="col-lg-10">
+                      <input type="password" class="form-control" name='cpassword'
+                             id="inputPassword2" placeholder="Password" [(ngModel)]="cpassword"
+                             required>
+                      <p id="validate-status"></p>
+                    </div>
+
+                  </div>
+
+                  <div class="form-group">
+                    <label for="select" class="col-lg-2 control-label">Mahal Status</label>
+                    <div class="col-lg-10">
+                      <select class="form-control" [ngModel]="selectedCategory"
+                              (ngModelChange)="onChange($event)" name="sel2">
+                        <option [value]="i.name" *ngFor="let i of options">{{i.name}}</option>
+
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="textArea" class="col-lg-2 control-label">Address</label>
+                    <div class="col-lg-10">
+                                            <textarea class="form-control" rows="3" name='address' id="textArea"
+                                                      [(ngModel)]="address" required></textarea>
+                      <span class="help-block">Enter the full address here</span>
+                    </div>
+                  </div>
+
+
+                  <div class="form-group">
+                    <div class="col-lg-10 col-lg-offset-2">
+                      <button type="reset" class="btn btn-default" (click)="home();">Cancel
+                      </button>
+                      <button type="submit" class="btn btn-primary" (click)="submitForm()">
+                        Submit
+                      </button>
+                    </div>
+                  </div>
+                </fieldset>
+                <div id='notifys' class="alert alert-dismissible alert-danger" style="display: none">
+                  <strong>password mismatch ,something went wrong,please try again</strong>
+                </div>
+              </form>
+
+            </div>
+          </div>
+
+          <!--edit customer form-->
+          <div id="editcustomer" style="display: none">
+            <div class="well bs-component">
+              <form class="form-horizontal">
+                <fieldset>
+                  <legend>Edit Mahal Detail</legend>
+                  <div class="form-group">
+                    <label for="inputEmail" class="col-lg-2 control-label">Mahal Code</label>
+                    <div class="col-lg-10">
+                      <input type="text" name='code' class="form-control" id="code"
+                             placeholder="Mahal Code" [(ngModel)]="mahalcode" required autofocus>
+                    </div>
+
+                  </div>
+                  <div class="form-group">
+                    <label for="inputEmail" class="col-lg-2 control-label">Mahal Name</label>
+                    <div class="col-lg-10">
+                      <input type="text" class="form-control" name='name' id="name"
+                             placeholder="Mahal Name" [(ngModel)]="mahalname" required>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="inputEmail" class="col-lg-2 control-label">Pin Code</label>
+                    <div class="col-lg-10">
+                      <input type="text" class="form-control" name='location' id="location"
+                             placeholder="pincode" [(ngModel)]="pincode" required>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="inputEmail" class="col-lg-2 control-label">Email</label>
+                    <div class="col-lg-10">
+                      <input type="email" class="form-control" name='email' id="email"
+                             placeholder="email" [(ngModel)]="email" required>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="inputEmail" class="col-lg-2 control-label">Phone</label>
+                    <div class="col-lg-10">
+                      <input type="number" class="form-control" name='phone' id="phone"
+                             placeholder="phone" [(ngModel)]="phone" required>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="inputEmail" class="col-lg-2 control-label">Alternate Number</label>
+                    <div class="col-lg-10">
+                      <input type="text" class="form-control" name='api' id="api"
+                             placeholder="Alternate Number" [(ngModel)]="alternatenumber"
+                             required>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="inputPassword" class="col-lg-2 control-label">Password</label>
+                    <div class="col-lg-10">
+                      <input type="password" class="form-control" name='password'
+                             id="inputPassword" placeholder="Password" [(ngModel)]="password"
+                             required>
+
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="inputPassword" class="col-lg-2 control-label">Confirm
+                      Password</label>
+                    <div class="col-lg-10">
+                      <input type="password" class="form-control" name='cpassword'
+                             id="inputPassword2" placeholder="Password" [(ngModel)]="cpassword"
+                             required>
+                      <p id="validate-status"></p>
+                    </div>
+
+                  </div>
+                  <div class="form-group">
+                    <label for="select" class="col-lg-2 control-label">Mahal Status</label>
+                    <div class="col-lg-10">
+                      <select class="form-control" [ngModel]="selectedCategory"
+                              (ngModelChange)="onChange(selectedCategory.value)" name="sel2">
+                        <option [value]="i.name" *ngFor="let i of options">{{i.name}}</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="textArea" class="col-lg-2 control-label">Address</label>
+                    <div class="col-lg-10">
+                                            <textarea class="form-control" rows="3" name='address' id="textArea"
+                                                      [(ngModel)]="address" required></textarea>
+                      <span class="help-block">Enter the full address here</span>
+                    </div>
+                  </div>
+
+
+                  <div class="form-group">
+                    <div class="col-lg-10 col-lg-offset-2">
+                      <button type="reset" class="btn btn-default" (click)="home();">Cancel
+                      </button>
+                      <button type="submit" class="btn btn-primary" (click)="updateForm()">
+                        Submit
+                      </button>
+                    </div>
+                  </div>
+                </fieldset>
+                <div id='notifyss' class="alert alert-dismissible alert-danger" style="display: none">
+                  <strong>Something went wrong..username may be already registered please try
+                    again</strong>
+                </div>
+              </form>
+
+            </div>
+          </div>
+
+
+          <!--            /////////////////////////////column end here////////////////////////////////////////-->
+        </div>
+
+
+        <!--////////////////////////////////////container end////////////////////////////////////////////////////////////////////////-->
+      </div>
+    </div>
