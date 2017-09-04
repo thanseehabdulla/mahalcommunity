@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
+import { MyDatePickerModule } from 'mydatepicker';
 import {
   NgModule,
   ApplicationRef
@@ -34,6 +35,7 @@ import {SelectModule} from 'ng2-select';
 
 import '../styles/styles.scss';
 import '../styles/headings.css';
+import {MomentModule} from 'angular2-moment';
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -66,6 +68,8 @@ type StoreType = {
    */
   imports: [
     BrowserModule,
+    MomentModule,
+    MyDatePickerModule,
     FormsModule,
     HttpModule, SelectModule,
     RouterModule.forRoot(ROUTES, { useHash: true, preloadingStrategy: PreloadAllModules })

@@ -97,8 +97,8 @@ router.post('/addmember', function (req, res, next) {
                             email: email,
                             address: address,
                             mobile: mobile,
-                            block:true,
-                            unblock:false,
+                            block: true,
+                            unblock: false,
                             varasangya: varasangya,
                             usertype: 1,
                             landlinenumber: landlinenumber,
@@ -119,6 +119,76 @@ router.post('/addmember', function (req, res, next) {
         })
     }
 })
+
+
+// addvarasangya
+router.post('/addvarasangya', function (req, res, next) {
+    res.setHeader('Content-Type', 'application/json')
+    var membercode = req.body['membercode'];
+    var name = req.body['name'];
+    var lastbeforepaid = req.body['lastpaid'];
+    var address = req.body['address'];
+    var varasangya = req.body['varasangyaamount'];
+    var newestpaid = req.body['newestpaid'];
+    var numberofmonth = req.body['numberofmonth'];
+    var grandtotal = req.body['grandtotal'];
+
+    var accesstoken = req.headers.authorization.split(" ")[1];
+    var accessTokenHash = crypto.createHash('sha1').update(accesstoken).digest('hex')
+    db.collection('accessTokens').findOne({token: accessTokenHash}, function (err, token) {
+        if (err) throw err
+        db.collection('varasangya').save({
+            linkcode: token.userId,
+            name: name,
+            membercode: membercode,
+            varasangya: varasangya,
+            address: address,
+            lastbeforepaid: lastbeforepaid,
+            lastpaid: newestpaid,
+            numberofmonth: numberofmonth,
+            grandtotal: grandtotal
+        }, function (err, results) {
+            if (err) throw err
+            res.json(results);
+        })
+    })
+})
+
+
+// addothersangya
+router.post('/addothersangya', function (req, res, next) {
+    res.setHeader('Content-Type', 'application/json')
+    var membercode = req.body['membercode'];
+    var name = req.body['name'];
+    var lastbeforepaid = req.body['lastpaid'];
+    var address = req.body['address'];
+    var sangya = req.body['amount'];
+    var newestpaid = req.body['newestpaid'];
+    var paymenttype = req.body['payment'];
+    var grandtotal = req.body['grandtotal'];
+
+    var accesstoken = req.headers.authorization.split(" ")[1];
+    var accessTokenHash = crypto.createHash('sha1').update(accesstoken).digest('hex')
+    db.collection('accessTokens').findOne({token: accessTokenHash}, function (err, token) {
+        if (err) throw err
+        db.collection('othersangya').save({
+            linkcode: token.userId,
+            name: name,
+            membercode: membercode,
+            sangya: sangya,
+            address: address,
+            lastbeforepaid: lastbeforepaid,
+            lastpaid: newestpaid,
+            paymentype: paymenttype,
+            grandtotal: grandtotal
+        }, function (err, results) {
+            if (err) throw err
+            res.json(results);
+        })
+    })
+})
+
+
 
 // get member data
 router.get('/getmembers', function (req, res, next) {
@@ -220,25 +290,122 @@ router.put('/updatemembersstatus/:id', function (req, res, next) {
     var updated_at = req.body['updated_at'];
     var block = req.body['block'];
     var unblock = req.body['unblock'];
-    var b,c;
-    if(block == "true") {
+    var b, c;
+    if (block == "true") {
         b = true;
-        c=false;
-    }else if (unblock == "true") {
+        c = false;
+    } else if (unblock == "true") {
         c = true;
         b = false;
     }
     db.collection('users').update({_id: ObjectID(req.params.id)}, {
         $set: {
             memberstatus: memberstatus,
-            block:b,
-            unblock:c,
+            block: b,
+            unblock: c,
             updated_at: updated_at
         }
     }, function (err, results) {
         if (err) throw err
         res.json(results);
     })
+});
+
+
+// update members
+
+router.put('/updatemembersstatusvarasangya/:id', function (req, res, next) {
+    var lastpaid = req.body['lastpaid'];
+    var updated_at = req.body['updated_at'];
+
+    db.collection('users').update({_id: ObjectID(req.params.id)}, {
+        $set: {
+            lastpaid:lastpaid,
+            updated_at: updated_at
+        }
+    }, function (err, results) {
+        if (err) throw err
+        res.json(results);
+    })
+});
+
+
+// update members
+
+router.put('/updatemembersstatusothersangya/:id', function (req, res, next) {
+    var lastpaid = req.body['lastpaid'];
+    var updated_at = req.body['updated_at'];
+    var paymenttype = req.body['paymenttype'];
+    if (paymenttype === 'Eid Ul Fithr'){
+        db.collection('users').update({_id: ObjectID(req.params.id)}, {
+            $set: {
+                lastpaideid:lastpaid,
+                updated_at: updated_at
+            }
+        }, function (err, results) {
+            if (err) throw err
+            res.json(results);
+        })
+    } else if (paymenttype === 'Bakrid')
+    {
+        db.collection('users').update({_id: ObjectID(req.params.id)}, {
+            $set: {
+                lastpaidbakrid:lastpaid,
+                updated_at: updated_at
+            }
+        }, function (err, results) {
+            if (err) throw err
+            res.json(results);
+        })
+    } else if (paymenttype === 'charity')
+    {
+        db.collection('users').update({_id: ObjectID(req.params.id)}, {
+            $set: {
+                lastpaidcharity:lastpaid,
+                updated_at: updated_at
+            }
+        }, function (err, results) {
+            if (err) throw err
+            res.json(results);
+        })
+    } else if (paymenttype === 'rathib')
+    {
+        db.collection('users').update({_id: ObjectID(req.params.id)}, {
+            $set: {
+                lastpaidrathib:lastpaid,
+                updated_at: updated_at
+            }
+        }, function (err, results) {
+            if (err) throw err
+            res.json(results);
+        })
+    } else if (paymenttype === 'molud')
+    {
+        db.collection('users').update({_id: ObjectID(req.params.id)}, {
+            $set: {
+                lastpaidmolud:lastpaid,
+                updated_at: updated_at
+            }
+        }, function (err, results) {
+            if (err) throw err
+            res.json(results);
+        })
+    } else if (paymenttype === 'miscellanous')
+    {
+        db.collection('users').update({_id: ObjectID(req.params.id)}, {
+            $set: {
+                lastpaidmiscellanous:lastpaid,
+                updated_at: updated_at
+            }
+        }, function (err, results) {
+            if (err) throw err
+            res.json(results);
+        })
+    }else{
+        console.log(paymenttype)
+        console.log("error")
+    }
+
 });
 
 
